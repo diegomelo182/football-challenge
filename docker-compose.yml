@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  api:
+    image: rails-api
+    build:
+      target: api
+      context: .
+    ports:
+      - 3000:3000
+    depends_on:
+      - mysql
+    networks:
+      - backend
+    environment:
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOSTNAME=${DB_HOSTNAME}
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+
+  api-unit-test:
+    image: rails-api-unit-test
+    build:
+      target: unit-test
+      context: .
+    depends_on:
+      - mysql
+    networks:
+      - backend
+    environment:
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOSTNAME=${DB_HOSTNAME}
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+
+  mysql:
+    image: mysql:8.0.32
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_USER: ${DB_ROOT_PASSWORD} # you can use it on your MYSQL Client to have more flexibility (if needed)
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
