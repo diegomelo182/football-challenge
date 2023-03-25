@@ -7,7 +7,8 @@ RUN bundle config --global frozen 1
 
 WORKDIR /usr/src/app
 COPY ./api/Gemfile ./api/Gemfile.lock ./
-RUN sudo apt-get install mysql-client libmysqlclient-dev &&\
+RUN apt-get update &&\
+    apt-get install libmariadb-dev &&\
     bundle install
 COPY ./api .
 
