@@ -8,6 +8,7 @@ exclude:
 - ".bundle/**/*"
 require:
 - rails
+- active_support
 domains: []
 reporters:
 - rubocop
