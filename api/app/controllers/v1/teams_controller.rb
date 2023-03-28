@@ -9,29 +9,29 @@ module V1
     def index
       @teams = TeamRepository.filter(params: team_filter_params)
 
-      render json: @teams
+      render jsonapi: @teams
     end
 
     # GET /teams/1
     def show
-      render json: @team
+      render jsonapi: @team
     end
 
     # POST /teams
     def create
       if TeamRepository.create(params: team_params)
-        render json: @team, status: :created, location: @team
+        render jsonapi: @team, status: :created, location: @team
       else
-        render json: @team.errors, status: :unprocessable_entity
+        render jsonapi: @team.errors, status: :unprocessable_entity
       end
     end
 
     # PATCH/PUT /teams/1
     def update
       if TeamRepository.update(id: @team.id, params: team_params)
-        render json: @team
+        render jsonapi: @team
       else
-        render json: @team.errors, status: :unprocessable_entity
+        render jsonapi: @team.errors, status: :unprocessable_entity
       end
     end
 

@@ -4,7 +4,7 @@
 class TeamRepository
   class << self
     def find(id)
-      Player.find(id)
+      Team.find(id)
     end
 
     def find_by(*attributes)

@@ -11,8 +11,8 @@ class PlayerRepository
       Player.find_by(attributes.first)
     end
 
-    def filter(params:)
-      Player.where(params)
+    def filter(scoped_model:)
+      scoped_model.all
     end
 
     def create(params:)
