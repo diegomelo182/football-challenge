@@ -6,7 +6,7 @@ class CreatePlayers < ActiveRecord::Migration[7.0]
       t.references :nationality, null: false, foreign_key: true
       t.references :team, null: true, foreign_key: true
       t.date :birthdate
-      t.string :position, limit: 1
+      t.integer :position
 
       t.timestamps
     end

@@ -12,7 +12,7 @@ class PlayerRepository
     end
 
     def filter(scoped_model:)
-      scoped_model.all
+      scoped_model.eager_load(:nationality, :team)
     end
 
     def create(params:)

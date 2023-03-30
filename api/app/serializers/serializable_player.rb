@@ -8,4 +8,20 @@ class SerializablePlayer < JSONAPI::Serializable::Resource
 
   belongs_to :nationality
   belongs_to :team
+
+  attribute :nationality_country do
+    @object&.nationality&.name
+  rescue StandardError
+    'Unknown'
+  end
+
+  attribute :team_name do
+    @object&.team&.name
+  rescue StandardError
+    'Agent free'
+  end
+
+  attribute :age do
+    ((Date.today - @object.birthdate) / 365.25).to_i
+  end
 end

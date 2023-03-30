@@ -10,13 +10,17 @@ services:
       - 3000:3000
     depends_on:
       - mysql
+      - redis
     networks:
       - backend
+      - frontend
     environment:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOSTNAME=${DB_HOSTNAME}
       - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - REDIS_PROVIDER=${REDIS_PROVIDER}
 
   api-unit-test:
     image: rails-api-unit-test
@@ -25,6 +29,7 @@ services:
       context: .
     depends_on:
       - mysql
+      - redis
     networks:
       - backend
     environment:
@@ -32,6 +37,38 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOSTNAME=${DB_HOSTNAME}
       - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - REDIS_PROVIDER=${REDIS_PROVIDER}
+
+  api-sidekiq:
+    image: rails-api-sidekiq
+    build:
+      target: sidekiq
+      context: .
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - backend
+    environment:
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOSTNAME=${DB_HOSTNAME}
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - REDIS_PROVIDER=${REDIS_PROVIDER}
+
+  frontend:
+    image: next-frontend
+    build:
+      target: frontend
+      context: .
+    ports:
+      - 3001:3001
+    depends_on:
+      - api
+    networks:
+      - frontend
 
   mysql:
     image: mysql:8.0.32
@@ -48,6 +85,16 @@ services:
     networks:
       - backend
 
+  redis:
+    image: redis/redis-stack
+    ports:
+      - 6379:6379
+      - 8001:8001
+    networks:
+      - backend
+
 networks:
   backend:
+    driver: bridge
+  frontend:
     driver: bridge

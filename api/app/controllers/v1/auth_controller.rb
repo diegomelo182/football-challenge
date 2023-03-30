@@ -6,18 +6,24 @@ module V1
     skip_before_action :authorized?
 
     def signin
-      auth_data = UserRepository.authenticate(email: sigin_params[:email], password: sigin_params[:password])
+      email, password = sigin_params.values_at(:email, :password)
+      message, status, success, user = UserRepository.authenticate(
+        email:, password:
+      ).values_at(
+        :message, :status, :success, :user
+      )
 
-      return render json: { message: auth_data[:message] }, status: auth_data[:status] unless auth_data[:success]
+      return render json: { message: }, status: status unless success
 
-      render json: { token: jwt_handler.encode_token(build_token_data(auth_data[:user])) }
+      render json: { token: jwt_handler.encode_token(build_token_data(user)) }
     end
 
     private
 
     def build_token_data(data)
       {
-        user_id: data.id
+        user_id: data&.id,
+        role: data&.role
       }
     end
 

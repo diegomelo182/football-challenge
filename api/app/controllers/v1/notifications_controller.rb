@@ -22,9 +22,9 @@ module V1
       @notification = Notification.new(notification_params)
 
       if @notification.save
-        render jsonapi: @notification, status: :created, location: @notification
+        render jsonapi: @notification, status: :created, location: v1_notification_url(@notification)
       else
-        render jsonapi: @notification.errors, status: :unprocessable_entity
+        render jsonapi_errors: @notification.errors, status: :unprocessable_entity
       end
     end
 
@@ -33,7 +33,7 @@ module V1
       if @notification.update(notification_params)
         render jsonapi: @notification
       else
-        render jsonapi: @notification.errors, status: :unprocessable_entity
+        render jsonapi_errors: @notification.errors, status: :unprocessable_entity
       end
     end
 

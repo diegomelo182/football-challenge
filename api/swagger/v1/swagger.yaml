@@ -13,7 +13,7 @@ paths:
       responses:
         '200':
           description: successful
-        '403':
+        '401':
           description: wrong password
         '404':
           description: user not found
@@ -34,6 +34,281 @@ paths:
               - auth:
                 - email
                 - email
+  "/v1/notifications":
+    post:
+      summary: Create notifications
+      tags:
+      - Notifications
+      parameters: []
+      responses:
+        '201':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notification:
+                  type: object
+                  properties:
+                    player_id:
+                      type: integer
+                    message:
+                      type: string
+              required:
+              - notification:
+                - player_id
+                - message
+    get:
+      summary: List notifications
+      tags:
+      - Notifications
+      responses:
+        '200':
+          description: successful
+  "/v1/notifications/{id}":
+    put:
+      summary: Update Notifications
+      tags:
+      - Notifications
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notification:
+                  type: object
+                  properties:
+                    player_id:
+                      type: integer
+                    message:
+                      type: string
+              required:
+              - notification:
+                - player_id
+                - message
+    get:
+      summary: Show specific notification
+      tags:
+      - Notifications
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+    delete:
+      summary: Delete specific notification
+      tags:
+      - Notifications
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: successful
+  "/v1/subscriptions":
+    post:
+      summary: Create subscriptions
+      tags:
+      - Subscriptions
+      parameters: []
+      responses:
+        '201':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscription:
+                  type: object
+                  properties:
+                    player_id:
+                      type: integer
+                    user_id:
+                      type: integer
+              required:
+              - subscription:
+                - player_id
+                - user_id
+    get:
+      summary: List subscriptions
+      tags:
+      - Subscriptions
+      responses:
+        '200':
+          description: successful
+  "/v1/subscriptions/{id}":
+    put:
+      summary: Update subscriptions
+      tags:
+      - Subscriptions
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscription:
+                  type: object
+                  properties:
+                    player_id:
+                      type: integer
+                    user_id:
+                      type: integer
+              required:
+              - subscription:
+                - player_id
+                - user_id
+    get:
+      summary: Show specific subscription
+      tags:
+      - Subscriptions
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+    delete:
+      summary: Delete specific subscription
+      tags:
+      - Subscriptions
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: successful
+  "/v1/users":
+    post:
+      summary: Create users
+      tags:
+      - Users
+      parameters: []
+      responses:
+        '201':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    role:
+                      type: integer
+              required:
+              - user:
+                - name
+                - email
+                - password
+                - role
+  "/v1/users/{id}":
+    put:
+      summary: Update users
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    role:
+                      type: integer
+              required:
+              - user:
+                - name
+                - email
+                - password
+                - role
+    get:
+      summary: Show specific user
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: user found
+    delete:
+      summary: Delete specific user
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: successful
 servers:
 - url: http://{defaultHost}
   variables:

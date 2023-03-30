@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  name: Admin
+  email: admin@email.com
+  password_digest: $2a$12$R7J9t15gEeIs3yY410nG1O6Hp/1IdWCzF10E8gOE21dlhx2Hq1Ysy # mypasswordhere
+  role: 1
+
+two:
+  id: 2
+  name: User
+  email: user@email.com
+  password_digest: $2a$12$R7J9t15gEeIs3yY410nG1O6Hp/1IdWCzF10E8gOE21dlhx2Hq1Ysy # mypasswordhere
+  role: 2

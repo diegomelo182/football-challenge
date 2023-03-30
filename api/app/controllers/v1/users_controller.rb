@@ -22,9 +22,9 @@ module V1
       @user = User.new(user_params)
 
       if @user.save
-        render jsonapi: @user, status: :created, location: @user
+        render jsonapi: @user, status: :created, location: v1_user_url(@user)
       else
-        render jsonapi: @user.errors, status: :unprocessable_entity
+        render jsonapi_errors: @user.errors, status: :unprocessable_entity
       end
     end
 
@@ -33,7 +33,7 @@ module V1
       if @user.update(user_params)
         render jsonapi: @user
       else
-        render jsonapi: @user.errors, status: :unprocessable_entity
+        render jsonapi_errors: @user.errors, status: :unprocessable_entity
       end
     end
 
@@ -51,7 +51,7 @@ module V1
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:name, :email, :password_digest, :type)
+      params.require(:user).permit(:name, :email, :password, :role)
     end
   end
 end

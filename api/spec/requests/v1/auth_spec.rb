@@ -1,6 +1,12 @@
 require 'swagger_helper'
 
 RSpec.describe 'v1/auth', type: :request do
+  fixtures :users
+
+  let!(:fixture_user) do
+    users(:one)
+  end
+
   path '/v1/auth/signin' do
     post('Signin') do
       tags 'Auth'
@@ -21,7 +27,7 @@ RSpec.describe 'v1/auth', type: :request do
       }
 
       response(200, 'successful') do
-        let(:auth) { { auth: { email: 'admin@email.com', password: 'MyAdmin@password123' } } }
+        let(:auth) { { auth: { email: fixture_user.email, password: 'mypasswordhere' } } }
         run_test! do |response|
           api_response = JSON.parse(response.body)
           expect(api_response).to have_key('token')

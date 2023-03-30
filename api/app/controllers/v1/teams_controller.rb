@@ -20,9 +20,9 @@ module V1
     # POST /teams
     def create
       if TeamRepository.create(params: team_params)
-        render jsonapi: @team, status: :created, location: @team
+        render jsonapi: @team, status: :created, location: v1_team_url(@team)
       else
-        render jsonapi: @team.errors, status: :unprocessable_entity
+        render jsonapi_errors: @team.errors, status: :unprocessable_entity
       end
     end
 
@@ -31,7 +31,7 @@ module V1
       if TeamRepository.update(id: @team.id, params: team_params)
         render jsonapi: @team
       else
-        render jsonapi: @team.errors, status: :unprocessable_entity
+        render jsonapi_errors: @team.errors, status: :unprocessable_entity
       end
     end
 

@@ -36,8 +36,6 @@ class JwtHandler
   private
 
   def fetch_user_id(id)
-    Rails.cache.fetch("jwt_user/#{id}", expires_in: 5.minutes) do
-      User.find_by(id:)
-    end
+    User.find_by(id:)
   end
 end
