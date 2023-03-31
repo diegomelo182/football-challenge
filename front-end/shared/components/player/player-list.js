@@ -6,19 +6,23 @@ import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import jwtDecode from 'jwt-decode';
 
 import PlayerService from '@/shared/services/player-service';
 import {
+  selectPlayersModalsState,
   selectPlayersPaginationState,
   selectPlayersqueryParamsState,
   selectPlayersState,
   setPlayersItems,
   setPlayersLoading,
+  setPlayersModalsParams,
   setPlayersPagination,
   setSelectedPlayer,
 } from '@/redux/slices/players';
 import PlayerNotificationModal from './player-notification-modal';
 import PlayerListFilter from './player-list-filter';
+import PlayerSubscriptionModal from './player-subscription-modal';
 
 const playerService = new PlayerService();
 
@@ -26,12 +30,22 @@ export default function PlayerList() {
   const playersQueryParamsState = useSelector(selectPlayersqueryParamsState);
   const playersState = useSelector(selectPlayersState);
   const playersPaginationState = useSelector(selectPlayersPaginationState);
+  const playerModalsState = useSelector(selectPlayersModalsState);
   const { currentPage, numberOfPages } = playersPaginationState;
 
   const [showModal, setShowModal] = useState(false);
   const [paginationArray, setPaginationArray] = useState([1]);
 
   const dispatch = useDispatch();
+
+  const userRole = () => {
+    try {
+      const data = jwtDecode(sessionStorage.getItem('token'));
+      return data.role;
+    } catch (error) {
+      return null;
+    }
+  };
 
   useEffect(() => {
     if (playersState?.length > 0) return;
@@ -106,7 +120,16 @@ export default function PlayerList() {
 
   const onClickCreateNotification = (playerObj) => {
     dispatch(setSelectedPlayer(playerObj));
-    setShowModal(true);
+    dispatch(
+      setPlayersModalsParams({ ...playerModalsState, showNotification: true })
+    );
+  };
+
+  const onClickCreateSubscription = (playerObj) => {
+    dispatch(setSelectedPlayer(playerObj));
+    dispatch(
+      setPlayersModalsParams({ ...playerModalsState, showSubscription: true })
+    );
   };
 
   return (
@@ -145,13 +168,24 @@ export default function PlayerList() {
                   <td>{player.attributes.team_name}</td>
                   <td>{player.attributes.age}</td>
                   <td>
-                    <Button
-                      variant='primary'
-                      size='sm'
-                      onClick={() => onClickCreateNotification(player)}
-                    >
-                      Create notification
-                    </Button>
+                    {userRole() === 'admin' && (
+                      <Button
+                        variant='primary'
+                        size='sm'
+                        onClick={() => onClickCreateNotification(player)}
+                      >
+                        Create notification
+                      </Button>
+                    )}
+                    {userRole() === 'user' && (
+                      <Button
+                        variant='primary'
+                        size='sm'
+                        onClick={() => onClickCreateSubscription(player)}
+                      >
+                        Subscribe to this Player
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -178,7 +212,8 @@ export default function PlayerList() {
             ))}
           </Pagination>
         </Col>
-        <PlayerNotificationModal show={showModal} />
+        <PlayerNotificationModal />
+        <PlayerSubscriptionModal />
       </Row>
     </Container>
   );

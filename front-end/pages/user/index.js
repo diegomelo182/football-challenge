@@ -2,6 +2,7 @@ import Head from 'next/head';
 
 import styles from '@/styles/Home.module.css';
 import Topbar from '@/shared/components/topbar/topbar';
+import PlayerList from '@/shared/components/player/player-list';
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <Topbar />
-        <h1>USER</h1>
+        <PlayerList />
       </main>
     </>
   );

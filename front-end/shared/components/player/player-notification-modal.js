@@ -8,7 +8,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import {
+  selectPlayersModalsState,
   selectSelectedPlayerState,
+  setPlayersModalsParams,
   setSelectedPlayer,
 } from '@/redux/slices/players';
 import validation from './player-notification-modal-validation';
@@ -20,8 +22,9 @@ const defaultValues = {
   message: '',
 };
 
-export default function PlayerNotificationModal({ show: showProp = false }) {
-  const [show, setShow] = useState(showProp);
+export default function PlayerNotificationModal() {
+  const playerModalsState = useSelector(selectPlayersModalsState);
+  const { showNotification } = playerModalsState || {};
 
   const {
     control,
@@ -30,19 +33,26 @@ export default function PlayerNotificationModal({ show: showProp = false }) {
   } = useForm({ defaultValues, resolver: yupResolver(validation) });
 
   const handleClose = () => {
-    setShow(false);
+    dispatch(setSelectedPlayer({}));
+    dispatch(
+      setPlayersModalsParams({
+        ...playerModalsState,
+        showNotification: false,
+      })
+    );
   };
 
   const selectedPlayerState = useSelector(selectSelectedPlayerState);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (showProp !== show) setShow(showProp);
-  }, [showProp]);
-
   const onSubmit = async (data) => {
     if (!selectedPlayerState?.id) {
-      setShow(false);
+      dispatch(
+        setPlayersModalsParams({
+          ...playerModalsState,
+          showNotification: false,
+        })
+      );
       return toast.error('You need to select a Player before it');
     }
 
@@ -58,7 +68,12 @@ export default function PlayerNotificationModal({ show: showProp = false }) {
       console.log(response);
       if (response?.data) {
         dispatch(setSelectedPlayer({}));
-        setShow(false);
+        dispatch(
+          setPlayersModalsParams({
+            ...playerModalsState,
+            showNotification: false,
+          })
+        );
 
         return toast.success('The Notification was created successfully');
       }
@@ -71,13 +86,39 @@ export default function PlayerNotificationModal({ show: showProp = false }) {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} backdrop='static' keyboard={false}>
+    <Modal
+      show={showNotification}
+      onHide={handleClose}
+      backdrop='static'
+      keyboard={false}
+    >
       <Modal.Header closeButton>
         <Modal.Title>Create Player notification</Modal.Title>
       </Modal.Header>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Modal.Body>
+          <div>
+            <strong>Player Information</strong>
+            <br />
+            <b>name: </b>
+            {selectedPlayerState?.attributes?.name}
+            <br />
+            <b>position: </b>
+            {selectedPlayerState?.attributes?.position}
+            <br />
+            <b>age: </b>
+            {selectedPlayerState?.attributes?.age}
+            <br />
+            <b>nationality: </b>
+            {selectedPlayerState?.attributes?.nationality_country}
+            <br />
+            <b>team: </b>
+            {selectedPlayerState?.attributes?.team_name}
+            <br />
+            <hr />
+          </div>
+
           <Form.Group className='mb-3' controlId='formBasicEmail'>
             <Form.Label>Message</Form.Label>
             <Controller

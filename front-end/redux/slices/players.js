@@ -6,6 +6,7 @@ const initialState = {
   items: [],
   pagination: { currentPage: 1, numberOfPages: 1 },
   queryParams: {},
+  modals: { showSubscription: false, showNotification: false },
   selected: {},
 };
 
@@ -29,6 +30,9 @@ export const playersSlice = createSlice({
     setPlayersQueryParams(state, action) {
       state.queryParams = action.payload;
     },
+    setPlayersModalsParams(state, action) {
+      state.modals = action.payload;
+    },
   },
 });
 
@@ -38,12 +42,14 @@ export const {
   setPlayersLoading,
   setPlayersPagination,
   setPlayersQueryParams,
+  setPlayersModalsParams,
 } = playersSlice.actions;
 
 export const selectPlayersState = (state) => state.players.items;
 export const selectSelectedPlayerState = (state) => state.players.selected;
 export const selectPlayersLoadingState = (state) => state.players.loading;
 export const selectPlayersPaginationState = (state) => state.players.pagination;
+export const selectPlayersModalsState = (state) => state.players.modals;
 export const selectPlayersqueryParamsState = (state) =>
   state.players.queryParams;
 
