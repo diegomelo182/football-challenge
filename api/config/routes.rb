@@ -8,7 +8,11 @@ Rails.application.routes.draw do
   namespace :v1 do
     resources :users, except: [:index]
     resources :players
-    resources :teams
+    resources :teams do
+      collection do
+        post '/create_bulk', to: 'teams#create_bulk'
+      end
+    end
     resources :notifications
     resources :subscriptions
     resources :nationalities, only: [:index]

@@ -5,7 +5,7 @@ class UserRepository
   class << self
     def authenticate(email:, password:)
       user = User.find_by(email:)
-      return { success: false, message: 'User not Found', status: :unauthorized } unless user
+      return { success: false, message: 'User not Found', status: :not_found } unless user
       return { success: false, message: 'Invalid password', status: :unauthorized } unless user.authenticate(password)
 
       { success: true, user: }

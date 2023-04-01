@@ -268,3 +268,104 @@ ActiveRecord::Base.transaction do
 end
 
 puts 'Users table was seeded successfully!'
+
+puts 'Seeding Players...'
+
+ActiveRecord::Base.transaction do
+  team = Team.where(name: 'Flamengo', acronym: 'CRF').first_or_create
+  players_data = [
+    {
+      name: 'Santos',
+      number: 1,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1988-01-01',
+      position: 'G'
+    },
+    {
+      name: 'Leo Pereira',
+      number: 3,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1978-01-01',
+      position: 'D'
+    },
+    {
+      name: 'Pablo',
+      number: 4,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1986-01-01',
+      position: 'D'
+    },
+    {
+      name: 'Rodrigo Caio',
+      number: 2,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1989-01-01',
+      position: 'D'
+    },
+    {
+      name: 'Airton Lucas',
+      number: 7,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1989-01-01',
+      position: 'D'
+    },
+    {
+      name: 'Varella',
+      number: 5,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1989-01-01',
+      position: 'D'
+    },
+    {
+      name: 'Vidal',
+      number: 12,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1988-01-01',
+      position: 'M'
+    },
+    {
+      name: 'Thiago Maia',
+      number: 14,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1989-01-01',
+      position: 'M'
+    },
+    {
+      name: 'Pedro',
+      number: 9,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1994-01-01',
+      position: 'A'
+    },
+    {
+      name: 'Gabriel Barbosa',
+      number: 10,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1993-01-01',
+      position: 'A'
+    },
+    {
+      name: 'Everton Cebolinha',
+      number: 21,
+      nationality_id: 31,
+      team_id: team.id,
+      birthdate: '1989-01-01',
+      position: 'A'
+    }
+  ]
+  players_data.each do |player|
+    Player.where(name: player[:name], team_id: player[:team_id]).first_or_create(player)
+  end
+end
+
+puts 'Players table was seeded successfully!'

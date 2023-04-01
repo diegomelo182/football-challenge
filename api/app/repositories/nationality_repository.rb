@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # class responsible for manage the team database table queries
-class TeamRepository
+class NationalityRepository
   class << self
     def find(id)
       Team.find(id)
@@ -11,16 +11,11 @@ class TeamRepository
       Team.find_by(attributes.attributes)
     end
 
-    def filter(params:)
-      Team.where(params)
+    def filter(scoped_model:)
+      scoped_model.all
     end
 
     def create(params:)
-      team = Team.new(params)
-      team.save
-    end
-
-    def create_bulk(params:)
       team = Team.new(params)
       team.save
     end

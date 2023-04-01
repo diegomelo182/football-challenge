@@ -5,7 +5,7 @@ module V1
   class NationalitiesController < ApplicationController
     # GET /nationalities
     def index
-      @nationalities = Nationality.all
+      @nationalities = NationalityRepository.filter(scoped_model: Nationality)
 
       render jsonapi: @nationalities
     end
